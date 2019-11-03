@@ -21,13 +21,13 @@ class ShoppingCartPageState extends State<ShoppingCartPage> {
 
   crudMedthods crudObj = new crudMedthods();
  //  var path = snapshot.data.documents[i].documentID;
-  int subTotal = 0;
-  var total = 0;
+  double subTotal = 0;
+  double total = 0;
 
   void calculate(){
     print(cartlist.length);
     for(int i=0; i<cartlist.length;i++){
-      subTotal+=int.parse(cartlist[i].price);
+      subTotal+=double.parse(cartlist[i].price);
     }
     setState(() {
       subTotal=subTotal;

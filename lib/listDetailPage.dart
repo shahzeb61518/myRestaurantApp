@@ -96,12 +96,7 @@ class _ListDetailState extends State<ListDetail> {
                                     height: 20,
                                     width: 95,
                                     // color: Colors.green,
-                                    child: Row(
-                                      children: <Widget>[
-                                        ratingbar(),
-                                        Text("5.0"),
-                                      ],
-                                    ))
+                                   )
                               ],
                             ),
                           ),
@@ -138,25 +133,25 @@ void showSnackBar(BuildContext context , String value){
   var snackbar = SnackBar(content: Text('$value  is selected'));
   Scaffold.of(context).showSnackBar(snackbar);
 }
-Widget ratingbar() {
-  return RatingBar(
-    initialRating: 4.0,
-    direction: Axis.horizontal,
-    allowHalfRating: true,
-    glowColor: Colors.white,
-    itemCount: 5,
-    itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-    itemBuilder: (context, _) => Icon(
-      Icons.star,
-      color: Colors.green,
-    ),
-
-    //   onRating: (color:Colors.green) {
-//        print(rating);
-    // },
-    itemSize: 15,
-  );
-}
+//Widget ratingbar() {
+//  return RatingBar(
+//    initialRating: 4.0,
+//    direction: Axis.horizontal,
+//    allowHalfRating: true,
+//    glowColor: Colors.white,
+//    itemCount: 5,
+//    itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
+//    itemBuilder: (context, _) => Icon(
+//      Icons.star,
+//      color: Colors.green,
+//    ),
+//
+//    //   onRating: (color:Colors.green) {
+////        print(rating);
+//    // },
+//    itemSize: 15,
+//  );
+//}
 
 class Cartitem {
   String name;
