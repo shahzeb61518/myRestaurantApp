@@ -4,8 +4,9 @@ import 'package:food_app_flutter_zone/src/pages/sigin_page.dart';
 
 import '../../userManagement.dart';
 
-class SignUpPage extends StatefulWidget {
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
+class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
 }
@@ -19,7 +20,6 @@ class _SignUpPageState extends State<SignUpPage> {
   String _firstName;
   String _lastName;
 
-
   bool validateAndSave() {
     final form = formKey.currentState;
     if (form.validate()) {
@@ -30,25 +30,38 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  void validateAndSubmit() {
+  Future validateAndSubmit() async {
     if (validateAndSave()) {
       print("before query first class");
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: _email, password: _password)
-          .then((value){
-        UserManagement().storeNewAdmin(value, context); //
-        print("before query first class");
-      }).catchError((e) {
-        print(e.code);
-        //String error = e;
-        //   _ackAlert(context,e);
-        // showSnackBar(context, error);
-      });
+//      FirebaseAuth.instance
+//          .createUserWithEmailAndPassword(email: _email, password: _password).then((user){
+//        UserManagement().storeNewUser(user, context);
+////            .storeNewUser(SignedInUser, context, _fullName, _userType); //
+//            Navigator.pop(context);
+//      })
+//          .catchError((e) {
+//        print(e);
+//      });
+//      final FirebaseUser user = await _auth.createUserWithEmailAndPassword(
+//        email: _email,
+//        password: _password,
+//      );
+      final FirebaseUser user = (await _auth.createUserWithEmailAndPassword(
+        email: _email,
+        password: _password,
+      ))
+          .user;
+      if (user != null) {
+     UserManagement().storeNewUser(user, context, _firstName, _lastName);
+      } else {
+       // _success = false;
+      }
     } else {
       print("error occured");
       //showSnackBar(context, "Oops error while regitering");
     }
   }
+
   bool _toggleVisibility = true;
 
   Widget _buildEmailTextField() {
@@ -60,8 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
           fontSize: 18.0,
         ),
       ),
-      validator: (value) =>
-      value.isEmpty ? "email can't be Empty" : null,
+      validator: (value) => value.isEmpty ? "email can't be Empty" : null,
       onSaved: (value) {
         _email = value;
       },
@@ -77,8 +89,7 @@ class _SignUpPageState extends State<SignUpPage> {
           fontSize: 18.0,
         ),
       ),
-      validator: (value) =>
-      value.isEmpty ? "First Name can't be Empty" : null,
+      validator: (value) => value.isEmpty ? "First Name can't be Empty" : null,
       onSaved: (value) {
         _firstName = value;
       },
@@ -94,14 +105,12 @@ class _SignUpPageState extends State<SignUpPage> {
           fontSize: 18.0,
         ),
       ),
-      validator: (value) =>
-      value.isEmpty ? "Last Name can't be Empty" : null,
+      validator: (value) => value.isEmpty ? "Last Name can't be Empty" : null,
       onSaved: (value) {
         _lastName = value;
       },
     );
   }
-
 
   Widget _buildPasswordTextField() {
     return TextFormField(
@@ -122,8 +131,7 @@ class _SignUpPageState extends State<SignUpPage> {
               : Icon(Icons.visibility),
         ),
       ),
-      validator: (value) =>
-      value.isEmpty ? "password can't be Empty" : null,
+      validator: (value) => value.isEmpty ? "password can't be Empty" : null,
       onSaved: (value) {
         _password = value;
       },
@@ -150,8 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
               : Icon(Icons.visibility),
         ),
       ),
-      validator: (value) =>
-      value.isEmpty ? "Password does't Match" : null,
+      validator: (value) => value.isEmpty ? "Password does't Match" : null,
       onSaved: (value) {
         _password = value;
       },
@@ -174,13 +181,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       'assets/images/background.jpg',
                       fit: BoxFit.cover,
                     )),
-
                 Container(
                   height: MediaQuery.of(context).size.height,
                   color: Colors.black.withOpacity(0.7),
                 ),
-
-
                 Padding(
                   padding: const EdgeInsets.only(top: 60),
                   child: Column(
@@ -191,13 +195,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: TextStyle(
                             fontSize: 40.0,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white
-                        ),
+                            color: Colors.white),
                       ),
                       SizedBox(
                         height: 50.0,
                       ),
-
                       Form(
                         key: formKey,
                         child: Padding(
@@ -209,15 +211,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               padding: EdgeInsets.all(20.0),
                               child: Column(
                                 children: <Widget>[
-                               //   _buildFirstNameTextField(),
+                                     _buildFirstNameTextField(),
                                   SizedBox(height: 5),
-                               //   _buildLastNameTextField(),
+                                     _buildLastNameTextField(),
                                   SizedBox(height: 5),
                                   _buildEmailTextField(),
                                   SizedBox(height: 5),
                                   _buildPasswordTextField(),
                                   SizedBox(height: 5),
-                                //  _buildConformPasswordTextField(),
+                                    _buildConformPasswordTextField(),
                                 ],
                               ),
                             ),
@@ -227,26 +229,26 @@ class _SignUpPageState extends State<SignUpPage> {
                       SizedBox(
                         height: 20.0,
                       ),
-                       InkWell(
-                         onTap: validateAndSubmit,
-                         child: Container(
-                            height: 40,
-                            width: 250,
-                            decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(5)),
-                            child: Center(
-                              child: Text(
-                                "SIGN UP",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                      InkWell(
+                        onTap: validateAndSubmit,
+                        child: Container(
+                          height: 40,
+                          width: 250,
+                          decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Center(
+                            child: Text(
+                              "SIGN UP",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
-                       ),
+                        ),
+                      ),
                       SizedBox(height: 20),
                       Container(
                         width: 320,
@@ -268,8 +270,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           SizedBox(width: 10.0),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                  builder: (BuildContext context) => SignInPage()));
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          SignInPage()));
                             },
                             child: Text(
                               "Sign in",
@@ -291,5 +295,4 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
-
 }

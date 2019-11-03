@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:food_app_flutter_zone/src/pages/complaintBox.dart';
 import 'package:food_app_flutter_zone/src/pages/home_page.dart';
 import 'package:food_app_flutter_zone/src/pages/profile_page.dart';
@@ -8,6 +9,10 @@ import 'screens/main_screen.dart';
 class App extends StatelessWidget{
   @override
   Widget build(BuildContext context){
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Food Delivery App",

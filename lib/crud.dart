@@ -20,6 +20,52 @@ class crudMedthods {
     return await Firestore.instance.collection('Complaint Box').snapshots();
   }
 
+  getOrdersData() async {
+    return await Firestore.instance.collection('orders').where("accept",isEqualTo: false).snapshots();
+  }
+
+  detOrderDetail(String docid) async {
+    return await Firestore.instance.collection('orders').document(docid).collection('food').snapshots();
+  }
+
+  getAcceptedOrdersData() async {
+    return await Firestore.instance.collection('orders').where("accept",isEqualTo: true).snapshots();
+  }
+
+  getUserProfileData() async {
+    return await Firestore.instance.collection('users').snapshots();
+  }
+
+  deleteprofileData(docId) {
+    Firestore.instance
+        .collection('users')
+        .document(docId)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  deleteorder(docId) {
+    Firestore.instance
+        .collection('orders')
+        .document(docId)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  deleteOrdersData(docId) {
+    Firestore.instance
+        .collection('orders')
+        .document(docId)
+        .delete()
+        .catchError((e) {
+      print(e);
+    });
+  }
+
   deleteData(docId) {
     Firestore.instance
         .collection('Complaint Box')
@@ -44,6 +90,16 @@ class crudMedthods {
   updateItemData(selectedDoc, newValues) {
     Firestore.instance
         .collection('Add Products')
+        .document(selectedDoc)
+        .updateData(newValues)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  updateOrderData(selectedDoc, newValues) {
+    Firestore.instance
+        .collection('orders')
         .document(selectedDoc)
         .updateData(newValues)
         .catchError((e) {

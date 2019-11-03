@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../pages/signup_page.dart';
 
@@ -7,6 +8,40 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final formkey = GlobalKey<FormState>();
+  String _email;
+  String _password;
+
+  bool validateAndSave() {
+    final form = formkey.currentState;
+    form.save();
+    if (form.validate()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void validateAndSubmit() {
+    if (validateAndSave()) {
+      FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _email,
+          password: _password)
+          .then((FirebaseUser) {
+            Navigator.pop(context);
+      }).catchError((e) {
+        print(e);
+      });
+    } else {
+     showSnackBar(context, 'Oops User Email or Password');
+    }
+  }
+
+  void showSnackBar(BuildContext context , String value){
+    var snackbar = SnackBar(content: Text(value));
+    Scaffold.of(context).showSnackBar(snackbar);
+  }
+
   bool _toggleVisibility = true;
 
   Widget _buildEmailTextField() {
@@ -18,6 +53,10 @@ class _SignInPageState extends State<SignInPage> {
           fontSize: 18.0,
         ),
       ),
+      validator: (value) => value.isEmpty ? "Email can't be Empty" : null,
+      onSaved: (value) {
+        _email = value;
+      },
     );
   }
 
@@ -41,6 +80,10 @@ class _SignInPageState extends State<SignInPage> {
         ),
       ),
       obscureText: _toggleVisibility,
+      validator: (value) => value.isEmpty ? "Password can't be Empty" : null,
+      onSaved: (value) {
+        _password = value;
+      },
     );
   }
 
@@ -83,21 +126,24 @@ class _SignInPageState extends State<SignInPage> {
                         height: 110.0,
                       ),
 
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Card(
-                          elevation: 5.0,
-                          color: Colors.white.withOpacity(0.3),
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Column(
-                              children: <Widget>[
-                                _buildEmailTextField(),
-                                SizedBox(
-                                  height: 20.0,
-                                ),
-                                _buildPasswordTextField(),
-                              ],
+                      Form(
+                        key: formkey,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Card(
+                            elevation: 5.0,
+                            color: Colors.white.withOpacity(0.3),
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: Column(
+                                children: <Widget>[
+                                  _buildEmailTextField(),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  _buildPasswordTextField(),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -110,19 +156,22 @@ class _SignInPageState extends State<SignInPage> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.only(left: 20),
-                            child: Container(
-                              height: 40,
-                              width: 140,
-                              decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(5.0)),
-                              child: Center(
-                                child: Text(
-                                  "SIGN IN",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
+                            child: InkWell(
+                              onTap: validateAndSubmit,
+                              child: Container(
+                                height: 40,
+                                width: 140,
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(5.0)),
+                                child: Center(
+                                  child: Text(
+                                    "SIGN IN",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),

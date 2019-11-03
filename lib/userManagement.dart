@@ -2,44 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_app_flutter_zone/src/screens/admin/addProduct.dart';
 
 class UserManagement{
 
-  bool isloading = false;
+  storeNewUser(user,context,firstname,lastname) {
+    String role = "user";
+    print('in user manaaaage class');
+    print(user);
+    print(user.uid.toString());
+    print(user.email);
 
-  storeNewShopkeeper(user,context){
-    String role = "shopkeeper";
-    Firestore.instance.collection('/users').add({
+    Firestore.instance.collection('users').document().setData({
+      'firstname': firstname,
+      'lastname': lastname,
       'email': user.email,
       'uid': user.uid,
       'role': role,
 
-    }).then((value){
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/shopkeeperProfile');
-    })
-        .catchError((e){
-      print(e);
     });
+    // {
+      showSnackBar(context, 'User Registered Successfully');
+    Navigator.of(context).pop();
+    Navigator.of(context).pushReplacementNamed('/homePage');
   }
 
-  storeNewAdmin(user,context){
-    String role = "admin";
-    Firestore.instance.collection('/users').add({
-      'email': user.email,
-      'uid': user.uid,
-      'role': role,
-    }).then((value){
-      Navigator.of(context).pop();
-      Navigator.of(context).pushReplacementNamed('/adminHomePage');
-    })
-        .catchError((e){
-      print(e);
-    });
-  }
-
-  adminAuthorizationAccess(BuildContext context){
-    isloading = true;
+  userAuthorizationAccess(BuildContext context){
     FirebaseAuth.instance.currentUser().then((user){
       Firestore.instance.collection('/users')
           .where('uid' , isEqualTo: user.uid)
@@ -50,37 +38,12 @@ class UserManagement{
 //            Navigator.of(context).push(MaterialPageRoute(
 //                builder: (BuildContext context)=> AdminDashboard()));
           }else{
-            showSnackBar(context, "you are not authorized to access this page");
+      //      showSnackBar(context, "you are not authorized to access this page");
           }
         }else{
-          print("No Data found");
+         showSnackBar(context, 'Oops invalid Email or Password');
         }
       });
-    });
-    isloading = false;
-  }
-
-  shopkeeperAuthorizationAccess(BuildContext context){
-    isloading = true;
-    FirebaseAuth.instance.currentUser().then((user){
-      Firestore.instance.collection('/users')
-          .where('uid',isEqualTo: user.uid)
-          .getDocuments()
-          .then((docs){
-        if(docs.documents[0].exists){
-          if(docs.documents[0].data['role'] == 'shopkeeper'){
-//            Navigator.of(context).push(MaterialPageRoute(
-//                builder: (BuildContext context)=> ShopkeeperDashboard()));
-          }else{
-            showSnackBar(context, "you are not authorized to access this page");
-          }
-        }else{
-          print("No Data found");
-        }
-        showSnackBar(context, "you are not authorized to access this page");
-
-      });
-
     });
   }
 

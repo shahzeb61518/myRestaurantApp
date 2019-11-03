@@ -1,64 +1,74 @@
 import 'package:flutter/material.dart';
 
+import '../../../crud.dart';
+
 class CompletedOrders extends StatefulWidget {
   @override
   _CompletedOrdersState createState() => _CompletedOrdersState();
 }
 
 class _CompletedOrdersState extends State<CompletedOrders> {
+  var acceptedordersData;
+
+  crudMedthods crudObj = new crudMedthods();
+  @override
+  void initState() {
+    // TODO: implement initState
+    crudObj.getAcceptedOrdersData().then((results) {
+      setState(() {
+        acceptedordersData = results;
+      });
+    });
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Accepted Orders"),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(top: 2),
-        child: getListView(),
+        child: Center(
+          child: Text('Completed Order'),
+        )
       ),
     );
   }
 
-  List<ItemClass> allItems = [
-    ItemClass('Daily Deals','Big discounts on top items! Updated daily','images/nowifi.png'),
-    ItemClass('Weekly Best Sellers','The best sold products of the week','images/nowifi.png'),
-    ItemClass('Gift Sets','The perfect gifts for every occasion','images/nowifi.png'),
-    ItemClass('Clearance','ISD clearance sale','images/nowifi.png'),
-    ItemClass('Renewed Gadgets','Refurbished Items','images/nowifi.png'),
 
-  ];
-
-  Widget getListView() {
-    return ListView.builder(
-        itemCount: allItems.length,
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 6.0,
-            child: ListTile(
-              contentPadding: EdgeInsets.only(left: 5),
-              leading: Padding(
-                padding: const EdgeInsets.only(right: 0.0),
-                child: Container(
-                  height: 50,
-                  width: 60,
-                  // color: Colors.grey.withOpacity(0.3),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.red,
-                    child: Image.asset(allItems[index].image),
+  Widget _acceptedOrderList() {
+    if (acceptedordersData != null) {
+      return StreamBuilder(
+        stream: acceptedordersData,
+        builder: (context, snapshot){
+          return ListView.builder(
+            itemCount: snapshot.data.documents.length,
+            padding: EdgeInsets.all(5.0),
+            itemBuilder: (context, i) {
+              return Card(
+                child: new ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.perm_identity,color: Colors.white,),
                   ),
+                  trailing: Icon(Icons.arrow_forward_ios),
+                  title: Text(snapshot.data.documents[i].data['user Name']),
+                  subtitle: Text(snapshot.data.documents[i].data['User Contact']),
+//                  onTap: () => navigateToDetail(snapshot.data.documents[i]),
+//                  onLongPress: (){
+//                    _showMaterialDialog(snapshot.data.documents[i].documentID);
+//                  },
                 ),
-              ),
-              title: Text(allItems[index].title),
-              subtitle: Text(allItems[index].subtitle),
-              trailing: Icon(Icons.arrow_forward_ios),
-            ),
+              );
+            },
           );
-        });
+        },
 
+      );
+    } else {
+      return Text('Loading, Please wait..');
+    }
   }
-}
-
-class ItemClass {
-  String title,subtitle;
-  String image;
-
-  ItemClass(this.title,this.subtitle,this.image);
 
 }

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_app_flutter_zone/src/screens/admin/showUserProfile.dart';
 
 import 'addProduct.dart';
 import 'checkComplaints.dart';
-import 'orderManagment.dart';
+import 'orders.dart';
 
 class AdminDashboard extends StatelessWidget {
   @override
@@ -112,16 +113,16 @@ class TheGridView {
         ),
         InkWell(
           child: makeGridCell("Users", 'assets/images/users.ico'),
-//          onTap: () {
-//            Navigator.of(context).push(MaterialPageRoute(
-//                builder: (BuildContext context) => UpdateProduct()));
-//          },
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => UserProfile()));
+          },
         ),
         InkWell(
           child: makeGridCell("Orders", 'assets/images/ecommerce.png'),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => OrderManagment()));
+                  builder: (BuildContext context) => Orders()));
             }
         ),
         InkWell(

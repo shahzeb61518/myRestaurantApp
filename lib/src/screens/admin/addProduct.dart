@@ -50,7 +50,7 @@ import 'adminDashboard.dart';
      Firestore.instance.collection('Add Products').add({
        'dish Name': _dishName,
        'rating': _rating,
-       'Price': "\$ "+_price,
+       'Price': _price,
        'category': _currentCategoryItemSelected,
        'image Url': url,
      }).then((value){
@@ -156,7 +156,7 @@ import 'adminDashboard.dart';
                                Text(
                                  "Food Name",
                                  style: TextStyle(
-                                   color: Colors.teal,
+                                   color: Colors.green,
                                    fontSize: 18.0,
                                    fontFamily: 'Montserrat',
                                  ),
@@ -165,7 +165,7 @@ import 'adminDashboard.dart';
                                Text(
                                  "",
                                  style: TextStyle(
-                                     color: Colors.teal, fontSize: 17.0),
+                                     color: Colors.green, fontSize: 17.0),
                                ),
                              ],
                            ),
@@ -213,7 +213,7 @@ import 'adminDashboard.dart';
                                Text(
                                  "",
                                  style: TextStyle(
-                                     color: Colors.teal, fontSize: 17.0),
+                                     color: Colors.green, fontSize: 17.0),
                                ),
                              ],
                            ),

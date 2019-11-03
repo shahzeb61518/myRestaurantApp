@@ -13,11 +13,11 @@ class ProfilePage extends StatelessWidget {
     return Container(
       height: screenSize.height / 2.6,
       decoration: BoxDecoration(
-//        image: DecorationImage(
-//          image: NetworkImage("https://cdn-images-1.medium.com/max/800/0*qZS6sL0kKw5DVXPn.jpg"),
-//          fit: BoxFit.cover,
-//        ),
-      color: Colors.green
+        image: DecorationImage(
+          image: AssetImage("assets/images/backimage.jpg"),
+          fit: BoxFit.cover,
+        ),
+     /// color: Colors.green
       ),
     );
   }
@@ -28,13 +28,14 @@ class ProfilePage extends StatelessWidget {
         width: 140.0,
         height: 140.0,
         decoration: BoxDecoration(
+
 //          image: DecorationImage(
 //            image: AssetImage('assets/images/beer.png'),
 //            fit: BoxFit.cover,
 //          ),
           borderRadius: BorderRadius.circular(80.0),
         ),
-        child: Icon(Icons.account_circle,size: 130,),
+        child: Icon(Icons.account_circle,size: 130,color: Colors.grey,),
       ),
     );
   }
@@ -165,47 +166,32 @@ class ProfilePage extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: InkWell(
-              onTap: () => print("followed"),
-              child: Container(
-                height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  color: Color(0xFF404A5C),
-                ),
-                child: Center(
-                  child: Text(
-                    "FOLLOW",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 10.0),
-          Expanded(
-            child: InkWell(
-              onTap: () => print("Message"),
-              child: Container(
-                height: 40.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
+           child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: InkWell(
+
+                child: Container(
+                  height: 40,
+                  width: 140,
+                  decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Center(
                     child: Text(
-                      "MESSAGE",
-                      style: TextStyle(fontWeight: FontWeight.w600),
+                      "BACK",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
+          //SizedBox(width: 10.0),
+
         ],
       ),
     );
@@ -226,8 +212,8 @@ class ProfilePage extends StatelessWidget {
                   _buildProfileImage(),
                   _buildFullName(),
                   _buildStatus(context),
-                  _buildStatContainer(),
-                  _buildBio(context),
+                 // _buildStatContainer(),
+                //  _buildBio(context),
                   _buildSeparator(screenSize),
                   SizedBox(height: 10.0),
                   _buildGetInTouch(context),

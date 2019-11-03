@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:food_app_flutter_zone/src/pages/cart.dart';
 
 class ListDetail extends StatefulWidget {
   final name;
@@ -17,6 +19,19 @@ class _ListDetailState extends State<ListDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.name),
+        actions: <Widget>[
+          InkWell(
+            onTap: () {
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ShoppingCartPage()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: Icon(Icons.add_shopping_cart),
+            ),
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: Firestore.instance
@@ -26,20 +41,20 @@ class _ListDetailState extends State<ListDetail> {
         //print an integer every 2secs, 10 times
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Text("Loading..");
+            return Center(child: CircularProgressIndicator());
           } else {
             return ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
+                    showSnackBar(context,snapshot.data.documents[index].data['dish Name'] );
                     Cartitem newItem = new Cartitem(
                         snapshot.data.documents[index].data['dish Name'],
                         snapshot.data.documents[index].data["Price"],
                         snapshot.data.documents[index].data['image Url'],
                         '1');
                     cartlist.add(newItem);
-
                   },
                   child: Card(
                     child: Container(
@@ -52,10 +67,12 @@ class _ListDetailState extends State<ListDetail> {
                             child: Container(
                               height: 90,
                               width: 90,
-                              child: Image.network(
-                                snapshot
-                                    .data.documents[index].data['image Url'],
+                              child: CachedNetworkImage(
                                 fit: BoxFit.cover,
+                                imageUrl: snapshot
+                                  .data.documents[index].data['image Url'],
+                               // placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
                               ),
                             ),
                           ),
@@ -63,11 +80,10 @@ class _ListDetailState extends State<ListDetail> {
                             child: Column(
                               children: <Widget>[
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 20),
+                                  padding: const EdgeInsets.only(top: 20),
                                   child: Text(
-                                    snapshot
-                                        .data.documents[index].data['dish Name'],
+                                    snapshot.data.documents[index]
+                                        .data['dish Name'],
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w400),
@@ -77,16 +93,15 @@ class _ListDetailState extends State<ListDetail> {
                                   height: 5,
                                 ),
                                 Container(
-                                  height: 20,
-                                  width: 95,
-                                 // color: Colors.green,
-                                  child: Row(
-                                    children: <Widget>[
-                                      ratingbar(),
-                                      Text("5.0"),
-                                    ],
-                                  )
-                                )
+                                    height: 20,
+                                    width: 95,
+                                    // color: Colors.green,
+                                    child: Row(
+                                      children: <Widget>[
+                                        ratingbar(),
+                                        Text("5.0"),
+                                      ],
+                                    ))
                               ],
                             ),
                           ),
@@ -119,7 +134,10 @@ class _ListDetailState extends State<ListDetail> {
     );
   }
 }
-
+void showSnackBar(BuildContext context , String value){
+  var snackbar = SnackBar(content: Text('$value  is selected'));
+  Scaffold.of(context).showSnackBar(snackbar);
+}
 Widget ratingbar() {
   return RatingBar(
     initialRating: 4.0,
@@ -137,7 +155,6 @@ Widget ratingbar() {
 //        print(rating);
     // },
     itemSize: 15,
-
   );
 }
 
@@ -148,6 +165,10 @@ class Cartitem {
   String quantity;
 
   Cartitem(this.name, this.price, this.image, this.quantity);
+
+
+
+
 }
 
 List<Cartitem> cartlist = new List<Cartitem>();

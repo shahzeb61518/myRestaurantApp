@@ -28,8 +28,9 @@ dependencies:
   firebase_storage: ^3.0.6
   image_picker: ^0.6.1+4
   cloud_firestore: ^0.12.9+1
-  flutter_rating_bar: ^3.0.0
+  flutter_rating_bar: ^2.0.0+2
   rating_bar: ^0.2.0
+  cached_network_image: ^1.1.2+1
 
 dev_dependencies:
   flutter_test:
@@ -51,12 +52,8 @@ flutter:
   assets:
    - assets/images/beer.png
    - assets/images/breakfast.jpeg
-   - assets/images/burger.png
-   - assets/images/cheeseburger.png
-   - assets/images/coffee-cup.png
    - assets/images/cupcake.png
    - assets/images/lunch.jpeg
-   - assets/images/pizza.png
    - assets/images/supper_1.jpeg
    - assets/images/turkey.png
    - assets/images/background.jpg
@@ -64,8 +61,25 @@ flutter:
    - assets/images/complaint.png
    - assets/images/users.ico
    - assets/images/addproducts.png
-
-  # An image asset can refer to one or more resolution-specific "variants", see
+   - assets/images/backimage.jpg
+   - assets/carosil/1.jpg
+   - assets/carosil/2.jpg
+   - assets/carosil/3.jpg
+   - assets/carosil/4.jpg
+   - assets/carosil/5.jpg
+   - assets/carosil/6.jpg
+   - assets/carosil/7.jpg
+   - assets/carosil/8.jpg
+   - assets/images/MENU/Starter.jpg
+   - assets/images/MENU/Tandoori.jpg
+   - assets/images/MENU/Balti Dishes.jpg
+   - assets/images/MENU/Biryani Dishes.jpg
+   - assets/images/MENU/Lamb.jpg
+   - assets/images/MENU/Vegetables.jpg
+   - assets/images/MENU/New Hash Dishes.jpeg
+   - assets/images/MENU/Sundries.jpg
+   - assets/images/MENU/Rice.jpg
+       # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
   # For details regarding adding assets from package dependencies, see
@@ -80,7 +94,7 @@ flutter:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  #       - asset: fonts/Schysler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:
